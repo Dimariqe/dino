@@ -27,6 +27,7 @@ sources = files(
     'src/application.vala',
     'src/dbus/login1.vala',
     'src/dbus/notifications.vala',
+    'src/dbus/status_notifier_item.vala',
     'src/dbus/upower.vala',
     'src/entity/account.vala',
     'src/entity/call.vala',
@@ -89,7 +90,9 @@ c_args = [
     '-DDINO_SYSTEM_PLUGIN_DIR="@0@"'.format(get_option('prefix') / get_option('libdir') / get_option('plugindir')),
     '-DG_LOG_DOMAIN="libdino"',
 ]
-vala_args = []
+vala_args = [
+    '--pkg=posix'
+]
 if meson.get_compiler('vala').version().version_compare('=0.56.11')
     vala_args += ['-D', 'VALA_0_56_11']
 endif
