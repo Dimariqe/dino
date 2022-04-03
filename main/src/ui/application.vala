@@ -25,8 +25,10 @@ public class Dino.Ui.Application : Adw.Application, Dino.Application {
     public SearchPathGenerator? search_path_generator { get; set; }
 
     internal static bool print_version = false;
+    internal static bool start_minimized_arg = false;
     private const OptionEntry[] options = {
         { "version", 0, 0, OptionArg.NONE, ref print_version, "Display version number", null },
+        { "minimized", 0, 0, OptionArg.NONE, ref start_minimized_arg, "Start Dino minimized", null },
         { null }
     };
 
@@ -71,6 +73,7 @@ public class Dino.Ui.Application : Adw.Application, Dino.Application {
         });
 
         activate.connect(() => {
+
             if (window == null) {
                 controller = new MainWindowController(this, stream_interactor, db);
                 config = new Config(db);
@@ -78,7 +81,17 @@ public class Dino.Ui.Application : Adw.Application, Dino.Application {
                 controller.set_window(window);
 
                 setup_systray();
+
+                if (start_minimized_arg || settings.start_minimized) {
+                    if (!settings.systray) {
+                        window.minimize();
+                        window.present();
+                    }
+                    return;
+                }
+
             }
+
             window.present();
         });
     }
