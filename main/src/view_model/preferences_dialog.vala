@@ -111,6 +111,8 @@ public class Dino.Ui.ViewModel.PreferencesDialog : Object {
         settings.bind_property("send-marker", general_page, "send-marker", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL);
         settings.bind_property("notifications", general_page, "notifications", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL);
         settings.bind_property("convert-utf8-smileys", general_page, "convert-emojis", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL);
+        settings.bind_property("systray", general_page, "systray", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL);
+        settings.bind_property("start-minimized", general_page, "start-minimized", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL);
     }
 }
 
@@ -126,4 +128,3 @@ public class Dino.Ui.ViewModel.ChangePasswordDialog : Object {
         return res;
     }
 }
-

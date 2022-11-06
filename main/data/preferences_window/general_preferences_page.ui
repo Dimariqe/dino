@@ -39,5 +39,21 @@
         </child>
       </object>
     </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <child>
+          <object class="AdwSwitchRow" id="systray_row">
+            <property name="title" translatable="yes">Minimize to Tray</property>
+            <property name="subtitle" translatable="yes">Hide window to system tray when closed</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwSwitchRow" id="start_minimized_row">
+            <property name="title" translatable="yes">Start Minimized</property>
+            <property name="subtitle" translatable="yes">Start application minimized to tray</property>
+          </object>
+        </child>
+      </object>
+    </child>
   </template>
 </interface>
