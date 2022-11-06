@@ -89,7 +89,6 @@ public class Dino.Ui.Application : Adw.Application, Dino.Application {
                     }
                     return;
                 }
-
             }
 
             window.present();
