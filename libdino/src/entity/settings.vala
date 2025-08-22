@@ -12,6 +12,7 @@ public class Settings : Object {
         notifications_ = col_to_bool_or_default("notifications", true);
         convert_utf8_smileys_ = col_to_bool_or_default("convert_utf8_smileys", true);
         check_spelling = col_to_bool_or_default("check_spelling", true);
+        minimize_to_tray_ = col_to_bool_or_default("minimize_to_tray", true);
     }
 
     private bool col_to_bool_or_default(string key, bool def) {
@@ -77,6 +78,18 @@ public class Settings : Object {
                 .value(db.settings.value, value.to_string())
                 .perform();
             check_spelling_ = value;
+        }
+    }
+
+    private bool minimize_to_tray_;
+    public bool minimize_to_tray {
+        get { return minimize_to_tray_; }
+        set {
+            db.settings.upsert()
+                .value(db.settings.key, "minimize_to_tray", true)
+                .value(db.settings.value, value.to_string())
+                .perform();
+            minimize_to_tray_ = value;
         }
     }
 

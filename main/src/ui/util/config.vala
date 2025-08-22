@@ -15,6 +15,7 @@ public class Config : Object {
         window_maximize = col_to_bool_or_default("window_maximized", false);
         window_width = col_to_int_or_default("window_width", 1200);
         window_height = col_to_int_or_default("window_height", 700);
+        minimize_to_tray = col_to_bool_or_default("minimize_to_tray", true); // Default to true on Windows
     }
 
     private bool window_maximize_;
@@ -53,6 +54,19 @@ public class Config : Object {
                     .value(db.settings.value, value.to_string())
                     .perform();
             window_width_ = value;
+        }
+    }
+
+    private bool minimize_to_tray_;
+    public bool minimize_to_tray {
+        get { return minimize_to_tray_; }
+        set {
+            if (value == minimize_to_tray_) return;
+            db.settings.upsert()
+                    .value(db.settings.key, "minimize_to_tray", true)
+                    .value(db.settings.value, value.to_string())
+                    .perform();
+            minimize_to_tray_ = value;
         }
     }
 
