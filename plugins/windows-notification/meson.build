@@ -9,6 +9,9 @@ dep_ntdll = declare_dependency(
 dep_windowsapp = declare_dependency(
     link_args: ['-lwindowsapp']
 )
+dep_shell32 = declare_dependency(
+    link_args: ['-lshell32']
+)
 
 dependencies = [
     dep_dino,
@@ -21,12 +24,15 @@ dependencies = [
     dep_shlwapi,
     dep_ntdll,
     dep_windowsapp,
+    dep_shell32,
 ]
 sources = files(
     'src/windows_notifications_plugin.vala',
     'src/windows_notifications_register_plugin.vala',
     'src/toast_notification_builder.vala',
     'src/win_notification_provider.vala',
+    'src/system_tray_plugin.vala',
+    'src/system_tray_icon.vala',
     'api/src/gobject/winrt-enums.cpp',
     'api/src/gobject/winrt-event-token.cpp',
     'api/src/gobject/winrt-toast-notification.cpp',
@@ -37,11 +43,13 @@ sources = files(
     'api/src/dyn_mod.cpp',
     'api/src/ginvoke.cpp',
     'api/src/shortcutcreator.cpp',
+    'api/src/system_tray_impl.cpp',
     'vapi/win32.vapi',
     'vapi/winrt.vapi',
     'vapi/shortcutcreator.vapi',
     'vapi/enums.vapi',
     'vapi/winrt_windows_ui_notifications.vapi',
+    'vapi/system_tray.vapi',
 )
 vala_args = [
     '--vapidir', meson.current_source_dir() / 'vapi',
@@ -58,6 +66,7 @@ cpp_args = [
 includes = include_directories(
     'api/include',
     'api/include/gobject',
+    'api/src',
 )
 lib_windows_notification = shared_library('windows-notification', sources, cpp_args: cpp_args, name_prefix: '', vala_args: vala_args, c_args: c_args, dependencies: dependencies, include_directories: includes, install: true, install_dir: get_option('libdir') / 'dino/plugins')
 dep_windows_notification = declare_dependency(link_with: lib_windows_notification, include_directories: include_directories('.'))

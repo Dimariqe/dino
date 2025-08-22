@@ -117,7 +117,12 @@ namespace Dino.Plugins.WindowsNotification {
         private string ToXml(StanzaNode node) {
             var namespace_state = new NamespaceState();
             namespace_state.set_current("");
-            return node.to_xml(namespace_state);
+            try {
+                return node.to_xml(namespace_state);
+            } catch (GLib.IOError e) {
+                warning("Failed to convert node to XML: %s", e.message);
+                return "";
+            }
         }
 
         private void ExecuteOnAllSubNodes(StanzaNode root_node, NodeFunction func) {

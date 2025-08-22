@@ -7,3 +7,4 @@ Makefile
 .idea
 .sqlite3
 gschemas.compiled
+libomemo-c
