@@ -6,6 +6,7 @@ public class Dino.Ui.ViewModel.GeneralPreferencesPage : Object {
     public bool notifications { get; set; }
     public bool convert_emojis { get; set; }
     public bool minimize_to_tray { get; set; }
+    public bool autostart { get; set; }
 }
 
 [GtkTemplate (ui = "/im/dino/Dino/preferences_window/general_preferences_page.ui")]
@@ -15,12 +16,18 @@ public class Dino.Ui.GeneralPreferencesPage : Adw.PreferencesPage {
     [GtkChild] private unowned Switch notification_switch;
     [GtkChild] private unowned Switch emoji_switch;
     [GtkChild] private unowned Switch tray_switch;
+    [GtkChild] private unowned Switch autostart_switch;
 
     public ViewModel.GeneralPreferencesPage model { get; set; default = new ViewModel.GeneralPreferencesPage(); }
     private Binding[] model_bindings = new Binding[0];
 
     construct {
         this.notify["model"].connect(on_model_changed);
+        
+#if !_WIN32
+        // Hide autostart option on non-Windows platforms
+        autostart_switch.parent.visible = false;
+#endif
     }
 
     private void on_model_changed() {
@@ -33,7 +40,8 @@ public class Dino.Ui.GeneralPreferencesPage : Adw.PreferencesPage {
                 model.bind_property("send-marker", marker_switch, "active", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL),
                 model.bind_property("notifications", notification_switch, "active", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL),
                 model.bind_property("convert-emojis", emoji_switch, "active", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL),
-                model.bind_property("minimize-to-tray", tray_switch, "active", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL)
+                model.bind_property("minimize-to-tray", tray_switch, "active", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL),
+                model.bind_property("autostart", autostart_switch, "active", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL)
             };
         } else {
             model_bindings = new Binding[0];

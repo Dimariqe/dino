@@ -8,8 +8,12 @@ namespace Dino.Plugins.WindowsNotification {
 
         private static string AUMID = "org.dino.Dino";
         private SystemTrayIcon? tray_icon = null;
+        private Dino.Entities.Settings settings;
+        private Dino.Application app;
 
         public void registered(Dino.Application app) {
+            this.app = app;
+            this.settings = app.settings;
 
             if (!winrt.InitApartment())
             {
@@ -29,29 +33,42 @@ namespace Dino.Plugins.WindowsNotification {
             app.stream_interactor.get_module(NotificationEvents.IDENTITY)
                 .register_notification_provider(new WindowsNotificationProvider(app, new ToastNotifier(AUMID)));
 
-            // Initialize system tray
-            tray_icon = new SystemTrayIcon(app);
-            
-            // Connect tray icon signals
-            tray_icon.activated.connect(() => {
-                // Show/restore main window when tray icon is clicked
-                debug("Tray icon activated - showing window");
-                app.activate();
+            // Initialize system tray based on current setting
+            update_tray_visibility();
+            settings.notify["minimize-to-tray"].connect(() => {
+                update_tray_visibility();
             });
+        }
+
+        private void update_tray_visibility() {
+            // Create tray icon instance only once if it doesn't exist
+            if (tray_icon == null) {
+                tray_icon = new SystemTrayIcon(app);
+                
+                // Connect tray icon signals
+                tray_icon.activated.connect(() => {
+                    debug("Tray icon activated - showing window");
+                    app.activate();
+                });
+                
+                tray_icon.exit_requested.connect(() => {
+                    debug("Exit requested from tray - quitting application");
+                    app.quit();
+                });
+            }
             
-            tray_icon.exit_requested.connect(() => {
-                // Exit application when exit is requested from tray menu
-                debug("Exit requested from tray - quitting application");
-                app.quit();
-            });
-            
-            tray_icon.show();
+            // Show or hide the tray icon based on setting
+            if (settings.minimize_to_tray) {
+                tray_icon.show();
+            } else {
+                tray_icon.hide();
+            }
         }
 
         public void shutdown() {
             if (tray_icon != null) {
                 tray_icon.hide();
-                tray_icon = null;
+                // Don't set to null here - let GC handle it naturally
             }
         }
     }

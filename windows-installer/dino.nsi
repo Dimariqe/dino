@@ -34,18 +34,32 @@ File /r input\*.*
 
 # define uninstaller name
 WriteUninstaller $INSTDIR\uninstaller.exe
+
+# Add entry to Add/Remove Programs
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Dino" "DisplayName" "Dino"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Dino" "UninstallString" "$INSTDIR\uninstaller.exe"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Dino" "InstallLocation" "$INSTDIR"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Dino" "DisplayIcon" "$INSTDIR\logo.ico"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Dino" "Publisher" "Dino"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Dino" "URLInfoAbout" "https://dino.im"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Dino" "HelpLink" "https://dino.im"
+WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Dino" "NoModify" 1
+WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Dino" "NoRepair" 1
  
 # Create a shortcut for startmenu
-CreateDirectory "$SMPROGRAMS\Dino"
-CreateShortcut "$SMPROGRAMS\Dino\Dino.lnk" "$INSTDIR\bin\dino.exe" "" "$INSTDIR\logo.ico"
-CreateShortcut "$SMPROGRAMS\Dino\Uninstaller.lnk" "$INSTDIR\uninstaller.exe"
-CreateShortcut "$SMPROGRAMS\Dino\License.lnk" "$INSTDIR\LICENSE" "" "notepad.exe" 0
+# CreateDirectory "$SMPROGRAMS\Dino"
+CreateShortcut "$SMPROGRAMS\Dino.lnk" "$INSTDIR\bin\dino.exe" "" "$INSTDIR\logo.ico"
+# CreateShortcut "$SMPROGRAMS\Dino\Uninstaller.lnk" "$INSTDIR\uninstaller.exe"
+# CreateShortcut "$SMPROGRAMS\Dino\License.lnk" "$INSTDIR\LICENSE" "" "notepad.exe" 0
 # CreateShortcut "$SMPROGRAMS\Dino\Dino website.lnk" "https://dino.im" "" "$INSTDIR\logo.ico"
 
 SectionEnd
 
 # Uninstaller section
 Section "Uninstall"
+
+# Remove registry entries
+DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Dino"
 
 # Delete startmenu folder
 RMDir /r "$SMPROGRAMS\Dino"

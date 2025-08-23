@@ -96,6 +96,7 @@ install_dependencies() {
         "mingw-w64-$ENV-libvorbis"
         "mingw-w64-$ENV-speex"
         "mingw-w64-$ENV-speexdsp"
+        "mingw-w64-$ENV-nsis"
     )
     
     echo "Updating package database..."
@@ -388,7 +389,16 @@ main() {
     configure_build
     build_dino
     create_package
-    
+
+    if [[ " $* " == *" --skip-install "* ]]; then
+        echo "Skipping create installation..."
+    else
+        cd windows-installer/
+        cp -r LICENSE LICENSE_SHORT ../dist/* input/
+        makensis dino.nsi
+        cd ..
+    fi
+
     # Run tests if requested
     if [[ " $* " == *" --test "* ]]; then
         run_tests

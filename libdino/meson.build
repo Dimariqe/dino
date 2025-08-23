@@ -29,6 +29,7 @@ sources = files(
     'src/entity/file_transfer.vala',
     'src/entity/message.vala',
     'src/entity/settings.vala',
+    'src/entity/windows_autostart.vala',
     'src/plugin/interfaces.vala',
     'src/plugin/loader.vala',
     'src/plugin/registry.vala',

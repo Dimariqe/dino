@@ -45,14 +45,40 @@ public class Util {
     {
 #if _WIN32
         try {
-            var file = File.new_for_path(file_uri);
-            if (file.query_exists()) {
-                // This should respect the mark of the web, unlike ShellExecute
-                string[] argv = { "explorer.exe", file_uri };
-                var process = new Subprocess.newv(argv, SubprocessFlags.NONE);
-                process.wait();
+            // Convert URI to local path if it's a file:// URI
+            string path_to_open = file_uri;
+            if (file_uri.has_prefix("file://")) {
+                var file = File.new_for_uri(file_uri);
+                path_to_open = file.get_path();
+                if (path_to_open == null) {
+                    // Fallback: manually decode the URI
+                    path_to_open = file_uri.substring(8); // Remove "file:///"
+                    path_to_open = Uri.unescape_string(path_to_open);
+                }
             }
+            
+            debug("Trying to open file: %s", path_to_open);
+            
+            // Use cmd /c start which is the most reliable way on Windows
+            string[] argv = { 
+                "cmd.exe", 
+                "/c", 
+                "start", 
+                "", // Empty title to avoid issues with paths that contain spaces
+                path_to_open 
+            };
+            
+            var process = new Subprocess.newv(argv, SubprocessFlags.NONE);
+            debug("Successfully launched file with cmd /c start");
+            
         } catch(Error e) {
+            warning("Failed to open file with default application: %s", e.message);
+            // Fallback to GTK's default method
+            try {
+                AppInfo.launch_default_for_uri(file_uri, null);
+            } catch(Error e2) {
+                warning("GTK fallback also failed: %s", e2.message);
+            }
         }
 #else
         AppInfo.launch_default_for_uri(file_uri, null);

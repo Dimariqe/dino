@@ -79,13 +79,18 @@ public class Dino.Ui.Application : Adw.Application, Dino.Application {
                 window = new MainWindow(this, stream_interactor, db, config);
                 controller.set_window(window);
                 
-                // Handle window close request for tray functionality (Windows and Linux)
-                if ((get_flags() & ApplicationFlags.IS_SERVICE) == ApplicationFlags.IS_SERVICE || config.minimize_to_tray) {
-                    window.close_request.connect(() => {
+                // Handle window close request for tray functionality
+                window.close_request.connect(() => {
+                    // Check if minimize to tray is enabled
+                    if (config.minimize_to_tray) {
                         window.hide();
                         return true; // Prevent the window from closing
-                    });
-                }
+                    } else {
+                        // If tray is disabled, quit the application when window is closed
+                        quit();
+                        return false; // Allow normal close
+                    }
+                });
             }
             window.present();
         });

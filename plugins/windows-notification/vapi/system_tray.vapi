@@ -16,6 +16,12 @@ namespace Dino.Plugins.WindowsNotification.Vapi.SystemTray {
     [CCode (cname = "tray_remove")]
     public bool remove();
     
+    [CCode (cname = "tray_hide")]
+    public bool hide();
+    
+    [CCode (cname = "tray_show")]
+    public bool show_tray();
+    
     [CCode (cname = "tray_set_tooltip")]
     public bool set_tooltip(string tooltip);
     

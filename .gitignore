@@ -8,3 +8,6 @@ Makefile
 .sqlite3
 gschemas.compiled
 libomemo-c
+dino_debug.log
+windows-installer/input/*
+dino-installer.exe

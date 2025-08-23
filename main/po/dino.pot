@@ -1116,6 +1116,22 @@ msgstr ""
 msgid "_Convert Smileys to Emoji"
 msgstr ""
 
+#: main/data/preferences_window/general_preferences_page.ui:71
+msgid "_Minimize to System Tray"
+msgstr ""
+
+#: main/data/preferences_window/general_preferences_page.ui:72
+msgid "Keep running in background when window is closed"
+msgstr ""
+
+#: main/data/preferences_window/general_preferences_page.ui:84
+msgid "Start with _Windows"
+msgstr ""
+
+#: main/data/preferences_window/general_preferences_page.ui:85
+msgid "Automatically start Dino when Windows starts"
+msgstr ""
+
 #: main/data/preferences_window/account_preferences_subpage.ui:79
 msgid "Local alias"
 msgstr ""

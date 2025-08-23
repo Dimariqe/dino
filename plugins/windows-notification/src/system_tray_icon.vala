@@ -55,12 +55,11 @@ namespace Dino.Plugins.WindowsNotification {
             // Try to find and set the application icon
             string[] icon_paths = {
                 "main/dino.ico",
-                "../main/dino.ico",
-                "../../main/dino.ico",
-                "./dino.ico",
+                "main/logo.ico",
+                "../dino.ico",
+                "../logo.ico",
                 "dino.ico",
-                "windows-installer/input/logo.ico",
-                "../windows-installer/input/logo.ico"
+                "logo.ico"
             };
             
             foreach (string path in icon_paths) {
@@ -84,16 +83,23 @@ namespace Dino.Plugins.WindowsNotification {
                 } else {
                     GLib.warning("Failed to add tray icon");
                 }
+            } else {
+                // If already active, just show it using the new show_tray function
+                if (Vapi.SystemTray.show_tray()) {
+                    GLib.debug("System tray icon shown successfully");
+                } else {
+                    GLib.warning("Failed to show tray icon");
+                }
             }
         }
 
         public void hide() {
             if (tray_active) {
-                if (Vapi.SystemTray.remove()) {
-                    tray_active = false;
-                    GLib.debug("System tray icon removed successfully");
+                // Use the new hide function that doesn't fully remove the icon
+                if (Vapi.SystemTray.hide()) {
+                    GLib.debug("System tray icon hidden successfully");
                 } else {
-                    GLib.warning("Failed to remove tray icon");
+                    GLib.warning("Failed to hide tray icon");
                 }
             }
         }

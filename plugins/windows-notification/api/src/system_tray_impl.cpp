@@ -139,6 +139,22 @@ gboolean tray_remove(void) {
     return result;
 }
 
+gboolean tray_hide(void) {
+    if (g_nid.hWnd) {
+        // Use NIM_DELETE to hide the icon temporarily
+        return Shell_NotifyIconW(NIM_DELETE, &g_nid);
+    }
+    return FALSE;
+}
+
+gboolean tray_show(void) {
+    if (g_nid.hWnd) {
+        // Re-add the icon to show it
+        return Shell_NotifyIconW(NIM_ADD, &g_nid);
+    }
+    return FALSE;
+}
+
 gboolean tray_set_tooltip(const char* tooltip) {
     if (!tooltip) return FALSE;
     

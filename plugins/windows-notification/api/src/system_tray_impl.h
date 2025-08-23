@@ -19,6 +19,8 @@ typedef void (*menu_callback_t)(int item_id);
 gboolean tray_init(void);
 gboolean tray_add(void);
 gboolean tray_remove(void);
+gboolean tray_hide(void);
+gboolean tray_show(void);
 gboolean tray_set_tooltip(const char* tooltip);
 gboolean tray_set_icon_from_file(const char* icon_path);
 void tray_set_left_click_callback(tray_callback_t callback);
